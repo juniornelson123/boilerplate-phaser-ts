@@ -1,0 +1,27 @@
+{
+    "preload": {
+        "files": [
+            {
+                "type": "image",
+                "key": "coin",
+                "url": "assets/coin.png"
+            },
+            {
+                "type": "image",
+                "key": "player",
+                "url": "assets/player.png"
+            },
+
+            {
+                "type": "spritesheet",
+                "key": "sprite",
+                "url": "assets/sprite-player.png",
+                "frameConfig": {
+                    "frameWidth": 48,
+                    "frameHeight": 40
+                }
+            }
+
+        ]
+    }
+}
