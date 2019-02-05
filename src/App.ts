@@ -12,8 +12,8 @@ window.onload = function(){
         title: "Coin Runner",
         url: "https://github.com/digitsensitive/phaser3-typescript",
         version: "1.1.1",
-        width: 768,
-        height: 576,
+        width: window.innerWidth,
+        height: window.innerHeight,
         type: Phaser.AUTO,
         parent: "game",
         scene: [ExampleTutorial.BootScene, ExampleTutorial.GameScene],
@@ -24,7 +24,7 @@ window.onload = function(){
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 0 },
+                gravity: { y: 300 },
                 debug: false
             }
         },

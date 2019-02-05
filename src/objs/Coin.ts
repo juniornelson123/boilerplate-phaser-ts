@@ -12,6 +12,10 @@ namespace ExampleTutorial{
             
         }
 
+        update(): void {
+            this.body.setVelocityY(-300)
+        }
+
         createNewCoin(): void {
             this.x = Phaser.Math.Between(100, 500)
             this.y = Phaser.Math.Between(100, 500)

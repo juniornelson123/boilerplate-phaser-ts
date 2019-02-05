@@ -6,20 +6,47 @@
                 "key": "coin",
                 "url": "assets/coin.png"
             },
-            {
-                "type": "image",
-                "key": "player",
-                "url": "assets/player.png"
+
+            { 
+                "type": "image", 
+                "key": "felpudo1", 
+                "url": "assets/felpudo/felpudoVoa1.png"
+            },
+
+            { 
+                "type": "image", 
+                "key": "felpudo2", 
+                "url": "assets/felpudo/felpudoVoa2.png"
+            },
+
+            { 
+                "type": "image", 
+                "key": "felpudo3", 
+                "url": "assets/felpudo/felpudoVoa3.png"
+            },
+
+            { 
+                "type": "image", 
+                "key": "felpudo4", 
+                "url": "assets/felpudo/felpudoVoa4.png"
+            },
+
+            { 
+                "type": "image", 
+                "key": "felpudo5", 
+                "url": "assets/felpudo/felpudoVoa5.png"
+            },
+
+            { 
+                "type": "image", 
+                "key": "felpudo6", 
+                "url": "assets/felpudo/felpudoVoa6.png"
             },
 
             {
-                "type": "spritesheet",
-                "key": "sprite",
-                "url": "assets/sprite-player.png",
-                "frameConfig": {
-                    "frameWidth": 48,
-                    "frameHeight": 40
-                }
+                "type": "image",
+                "key": "background",
+                "url": "assets/fundo.png"
             }
 
         ]

@@ -14,8 +14,8 @@ window.onload = function () {
         title: "Coin Runner",
         url: "https://github.com/digitsensitive/phaser3-typescript",
         version: "1.1.1",
-        width: 768,
-        height: 576,
+        width: window.innerWidth,
+        height: window.innerHeight,
         type: Phaser.AUTO,
         parent: "game",
         scene: [ExampleTutorial.BootScene, ExampleTutorial.GameScene],
@@ -26,7 +26,7 @@ window.onload = function () {
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 0 },
+                gravity: { y: 300 },
                 debug: false
             }
         },
@@ -60,6 +60,56 @@ var ExampleTutorial;
 })(ExampleTutorial || (ExampleTutorial = {}));
 var ExampleTutorial;
 (function (ExampleTutorial) {
+    var Bird = /** @class */ (function (_super) {
+        __extends(Bird, _super);
+        function Bird(params) {
+            var _this = _super.call(this, params.scene, params.x, params.y, params.key) || this;
+            _this.isJump = false;
+            _this.currentScene = params.scene;
+            _this.currentScene.add.existing(_this);
+            _this.currentScene.physics.world.enable(_this);
+            _this.createAnims();
+            _this.initInput();
+            _this.setScale(0.6, 0.6);
+            return _this;
+        }
+        Bird.prototype.createAnims = function () {
+            this.currentScene.anims.create({
+                key: "fly",
+                frames: [
+                    { key: 'felpudo1', frame: null },
+                    { key: 'felpudo2', frame: null },
+                    { key: 'felpudo3', frame: null },
+                    { key: 'felpudo4', frame: null },
+                ],
+                frameRate: 8,
+                repeat: -1
+            });
+        };
+        Bird.prototype.initInput = function () {
+            this.jump = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        };
+        Bird.prototype.handleInput = function () {
+            if (this.jump.isDown && !this.isJump) {
+                this.body.setVelocityY(-150);
+                this.isJump = true;
+            }
+            else if (this.jump.isUp) {
+                this.isJump = false;
+            }
+        };
+        Bird.prototype.update = function () {
+            this.handleInput();
+        };
+        Bird.prototype.playAnimation = function (anim) {
+            this.anims.play(anim);
+        };
+        return Bird;
+    }(Phaser.GameObjects.Sprite));
+    ExampleTutorial.Bird = Bird;
+})(ExampleTutorial || (ExampleTutorial = {}));
+var ExampleTutorial;
+(function (ExampleTutorial) {
     var Coin = /** @class */ (function (_super) {
         __extends(Coin, _super);
         function Coin(params) {
@@ -69,6 +119,9 @@ var ExampleTutorial;
             _this.currentScene.add.existing(_this);
             return _this;
         }
+        Coin.prototype.update = function () {
+            this.body.setVelocityY(-300);
+        };
         Coin.prototype.createNewCoin = function () {
             this.x = Phaser.Math.Between(100, 500);
             this.y = Phaser.Math.Between(100, 500);
@@ -86,110 +139,6 @@ var ExampleTutorial;
 })(ExampleTutorial || (ExampleTutorial = {}));
 var ExampleTutorial;
 (function (ExampleTutorial) {
-    var Player = /** @class */ (function (_super) {
-        __extends(Player, _super);
-        function Player(params) {
-            var _this = _super.call(this, params.scene, params.x, params.y, params.key) || this;
-            _this.speed = 5;
-            console.log(_this);
-            _this.currentScene = params.scene;
-            //carregar inputs loadInputs
-            _this.loadInputs();
-            params.scene.physics.world.enable(_this);
-            return _this;
-            // this.body.setGravityY(1000);
-            // this.currentScene.add.existing(this)
-            //adicionar fisica ao corpo
-            // this.currentScene.physics.world.enable(this)
-        }
-        Player.prototype.update = function () {
-            this.handleInputs();
-        };
-        Player.prototype.loadInputs = function () {
-            this.rightKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-            this.leftKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-            this.upKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-            this.downKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        };
-        Player.prototype.handleInputs = function () {
-            if (this.rightKey.isDown) {
-                this.x += this.speed;
-            }
-            if (this.leftKey.isDown) {
-                this.x -= this.speed;
-            }
-            if (this.upKey.isDown) {
-                this.y -= this.speed;
-            }
-            if (this.downKey.isDown) {
-                this.y += this.speed;
-            }
-        };
-        return Player;
-    }(Phaser.Physics.Arcade.Image));
-    ExampleTutorial.Player = Player;
-})(ExampleTutorial || (ExampleTutorial = {}));
-var ExampleTutorial;
-(function (ExampleTutorial) {
-    var SpritePlayer = /** @class */ (function (_super) {
-        __extends(SpritePlayer, _super);
-        function SpritePlayer(params) {
-            var _this = _super.call(this, params.scene, params.x, params.y, params.key, params.frame) || this;
-            _this.currentScene = params.scene;
-            _this.currentScene.physics.world.enable(_this);
-            _this.currentScene.add.existing(_this);
-            _this.currentScene.anims.create({
-                key: "turn",
-                frames: [{ key: "sprite", frame: 0 }],
-                frameRate: 10
-            });
-            _this.currentScene.anims.create({
-                key: "run",
-                frames: _this.currentScene.anims.generateFrameNumbers("sprite", { start: 10, end: 14 }),
-                frameRate: 10
-            });
-            _this.loadInputs();
-            return _this;
-        }
-        SpritePlayer.prototype.loadInputs = function () {
-            this.rightKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-            this.leftKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-            this.upKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-            this.downKey = this.currentScene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        };
-        SpritePlayer.prototype.update = function () {
-            this.handleInputs();
-        };
-        SpritePlayer.prototype.handleInputs = function () {
-            if (this.rightKey.isDown || this.leftKey.isDown || this.upKey.isDown || this.downKey.isDown) {
-                if (this.rightKey.isDown) {
-                    this.anims.play("run", true);
-                    this.x += 5;
-                    this.setScale(1, 1);
-                }
-                if (this.leftKey.isDown) {
-                    this.anims.play("run", true);
-                    this.x -= 5;
-                    this.setScale(-1, 1);
-                    console.log(this);
-                }
-                if (this.upKey.isDown) {
-                    this.y -= 5;
-                }
-                if (this.downKey.isDown) {
-                    this.y += 5;
-                }
-            }
-            else {
-                this.anims.play('turn');
-            }
-        };
-        return SpritePlayer;
-    }(Phaser.GameObjects.Sprite));
-    ExampleTutorial.SpritePlayer = SpritePlayer;
-})(ExampleTutorial || (ExampleTutorial = {}));
-var ExampleTutorial;
-(function (ExampleTutorial) {
     var BootScene = /** @class */ (function (_super) {
         __extends(BootScene, _super);
         function BootScene() {
@@ -198,6 +147,7 @@ var ExampleTutorial;
         BootScene.prototype.preload = function () {
             this.cameras.main.setBackgroundColor(0x98d687);
             this.createLoadingbar();
+            //load bar
             this.load.on("progress", function (value) {
                 this.progressBar.clear();
                 this.progressBar.fillStyle(0xfff6d3, 1);
@@ -233,32 +183,25 @@ var ExampleTutorial;
             return _super.call(this, { key: "GameScene" }) || this;
         }
         GameScene.prototype.preload = function () {
+            //load methods
         };
         GameScene.prototype.create = function () {
-            this.player = new ExampleTutorial.Player({ scene: this, x: 100, y: 100, key: "player" });
-            this.coin = new ExampleTutorial.Coin({ scene: this, x: 500, y: 200, key: "coin" });
-            this.spritePlayer = new ExampleTutorial.SpritePlayer({ scene: this, x: 200, y: 200, key: "sprite", frame: 1 });
-            this.score = 0;
+            this.bg = this.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, window.innerWidth, window.innerHeight, "background");
             this.style = { font: "20px Arial", fill: "#fff" };
-            this.scoreText = this.add.text(20, 20, "score: " + this.score, this.style);
-            this.physics.add.collider(this.player, this.coin);
+            // this.coin = new Coin({scene: this, x: 100, y: 200, key: "coin"})
+            this.bird = new ExampleTutorial.Bird({ scene: this, x: 100, y: 100, key: "felpudo1" });
+            this.bird.playAnimation("fly");
         };
         GameScene.prototype.update = function (dt) {
-            this.player.update();
-            this.spritePlayer.update();
-            this.physics.overlap(this.player, this.coin, this.hit, null, this);
+            //update methods
+            this.bird.update();
+            // this.coin.update()
+            this.bg._tilePosition.x += 1;
+            //verify collision: coin -> bird
+            // this.physics.overlap(this.bird, this.coin, this.hit, null, this)
         };
         GameScene.prototype.hit = function () {
-            this.coin.createNewCoin();
-            this.score += 1;
-            this.scoreText.setText("score: " + this.score);
-            this.tweens.add({
-                targets: this.player,
-                duration: 200,
-                scaleX: 2,
-                scaleY: 2,
-                yoyo: true
-            });
+            console.log("collisão dectada");
         };
         return GameScene;
     }(Phaser.Scene));
